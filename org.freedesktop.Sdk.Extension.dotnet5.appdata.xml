@@ -3,11 +3,11 @@
   <id>org.freedesktop.Sdk.Extension.dotnet5</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
-  <name>.NET Core 5 SDK extension</name>
-  <summary>.NET Core SDK extension</summary>
+  <name>.NET 5 SDK extension</name>
+  <summary>.NET 5 SDK extension</summary>
   <description>
     <p>
-      This SDK extension allows you to build and run .NET Core apps.
+      This SDK extension allows you to build and run .NET Core 5 apps.
     </p>
   </description>
   <url type="homepage">https://dotnet.microsoft.com/</url>
