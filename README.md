@@ -4,18 +4,22 @@
 Dotnet commands can be used by calling `/usr/lib/sdk/dotnet5/bin/dotnet` file. 
 
 ###  Scripts
-* `/usr/lib/sdk/dotnet5/install.sh` - copies dotnet runtime to flatpak package.
-* `/usr/lib/sdk/dotnet5/install-sdk.sh` - copies dotnet SDK to flatpak package.
+* `/usr/lib/sdk/dotnet5/enable.sh` - enable dotnet while building package.
+* `/usr/lib/sdk/dotnet5/install.sh` - copies dotnet runtime to package.
+* `/usr/lib/sdk/dotnet5/install-sdk.sh` - copies dotnet SDK to package.
 
 ### Publishing project
 
 ```json
 "build-commands": [
-    "/usr/lib/sdk/dotnet5/install.sh",
-    "/usr/lib/sdk/dotnet5/bin/dotnet publish -c Release YourProject.csproj",
+    "/usr/lib/sdk/dotnet5/enable.sh",
+    "dotnet publish -c Release YourProject.csproj",
     "cp -r --remove-destination /run/build/YourProject/bin/Release/net5.0/publish/ /app/bin/",
+    "/usr/lib/sdk/dotnet5/install.sh"
 ]
 ```
+
+The `install.sh` must be called after using SDK because it replaces symlink to the dotnet binary. It doesn't matter if you are using `install-sdk.sh`.
 
 ### Using nuget packages
 If you want to use nuget packages it is recommended to use the [Flatpak .NET Generator](https://github.com/flatpak/flatpak-builder-tools/tree/master/dotnet) tool. It generates sources file that can be included in manifest.
@@ -23,7 +27,7 @@ If you want to use nuget packages it is recommended to use the [Flatpak .NET Gen
 ```json
 "build-commands": [
     "/usr/lib/sdk/dotnet5/install.sh",
-    "/usr/lib/sdk/dotnet5/bin/dotnet publish -c Release --source ./nuget-sources YourProject.csproj",
+    "dotnet publish -c Release --source ./nuget-sources YourProject.csproj",
     "cp -r --remove-destination /run/build/YourProject/bin/Release/net5.0/publish/ /app/bin/"
 ],
 "sources": [
@@ -105,7 +109,7 @@ Then add build options:
     }
 },
 "build-commands": [
-    "/usr/lib/sdk/dotnet5/bin/dotnet publish -c Release --source ./nuget-sources YourProject.csproj --runtime $RUNTIME --self-contained true",
+    "dotnet publish -c Release --source ./nuget-sources YourProject.csproj --runtime $RUNTIME --self-contained true",
     "cp -r --remove-destination /run/build/YourProject/bin/Release/net5.0/$RUNTIME/publish/ /app/bin/",
 ],
 ```
