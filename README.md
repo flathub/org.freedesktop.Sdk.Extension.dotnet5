@@ -1,32 +1,40 @@
 # Dotnet 5 SDK extension
 
 ## How to use
-Dotnet commands can be used by calling `/usr/lib/sdk/dotnet5/bin/dotnet` file. 
+You need to add following lines to flatpak manifest:
+```json
+"sdk-extensions": [
+    "org.freedesktop.Sdk.Extension.dotnet5"
+],
+"build-options": {
+    "append-path": "/usr/lib/sdk/dotnet5/bin",
+    "append-ld-library-path": "/usr/lib/sdk/dotnet5/lib",
+    "env": {
+        "PKG_CONFIG_PATH": "/app/lib/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig:/usr/lib/sdk/dotnet5/lib/pkgconfig"
+    }
+},
+```
 
 ###  Scripts
-* `/usr/lib/sdk/dotnet5/enable.sh` - enable dotnet while building package.
-* `/usr/lib/sdk/dotnet5/install.sh` - copies dotnet runtime to package.
-* `/usr/lib/sdk/dotnet5/install-sdk.sh` - copies dotnet SDK to package.
+* `install.sh` - copies dotnet runtime to package.
+* `install-sdk.sh` - copies dotnet SDK to package.
 
 ### Publishing project
 
 ```json
 "build-commands": [
-    "/usr/lib/sdk/dotnet5/enable.sh",
+    "install.sh",
     "dotnet publish -c Release YourProject.csproj",
     "cp -r --remove-destination /run/build/YourProject/bin/Release/net5.0/publish/ /app/bin/",
-    "/usr/lib/sdk/dotnet5/install.sh"
 ]
 ```
-
-The `install.sh` must be called after using SDK because it replaces symlink to the dotnet binary. It doesn't matter if you are using `install-sdk.sh`.
 
 ### Using nuget packages
 If you want to use nuget packages it is recommended to use the [Flatpak .NET Generator](https://github.com/flatpak/flatpak-builder-tools/tree/master/dotnet) tool. It generates sources file that can be included in manifest.
 
 ```json
 "build-commands": [
-    "/usr/lib/sdk/dotnet5/install.sh",
+    "install.sh",
     "dotnet publish -c Release --source ./nuget-sources YourProject.csproj",
     "cp -r --remove-destination /run/build/YourProject/bin/Release/net5.0/publish/ /app/bin/"
 ],
@@ -109,6 +117,7 @@ Then add build options:
     }
 },
 "build-commands": [
+    "mkdir -p /app/bin",
     "dotnet publish -c Release --source ./nuget-sources YourProject.csproj --runtime $RUNTIME --self-contained true",
     "cp -r --remove-destination /run/build/YourProject/bin/Release/net5.0/$RUNTIME/publish/* /app/bin/",
 ],
