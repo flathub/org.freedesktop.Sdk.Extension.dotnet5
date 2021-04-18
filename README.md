@@ -45,7 +45,7 @@ If you want to use nuget packages it is recommended to use the [Flatpak .NET Gen
 ```
 
 ### Publishing self contained app and trimmed binaries
-Dotnet 5 gives option to include runtime in published application and trim their binaries. This allows you to significantly reduce the size of the package and get rid of `/usr/lib/sdk/dotnet5/install.sh`. 
+Dotnet 5 gives option to include runtime in published application and trim their binaries. This allows you to significantly reduce the size of the package and get rid of `/usr/lib/sdk/dotnet5/bin/install.sh`. 
 
 First you need to have following lines in `sources.json`. These packages are needed to build a project for specific runtime. 
 
