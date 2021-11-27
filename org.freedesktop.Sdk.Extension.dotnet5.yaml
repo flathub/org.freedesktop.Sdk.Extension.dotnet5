@@ -32,7 +32,7 @@ modules:
     build-commands:
       - "mkdir -p /usr/lib/sdk/dotnet5/{bin,lib}"
       - "cp -r * /usr/lib/sdk/dotnet5/lib"
-      - "ln -s /usr/lib/sdk/dotnet5/lib/dotnet /usr/lib/sdk/dotnet5/bin/dotnet"
+      - "ln -s ../lib/dotnet /usr/lib/sdk/dotnet5/bin/dotnet"
     sources:
       - type: archive
         only-arches: [x86_64]
